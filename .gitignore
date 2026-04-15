@@ -1,0 +1,10 @@
+.DS_Store
+.vscode
+.idea
+
+node_modules/
+
+playwright-report
+blob-report
+test-results
+dist

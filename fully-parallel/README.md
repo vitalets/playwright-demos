@@ -1,4 +1,4 @@
-# Playwright Explained: Fully Parallel Mode
+# Playwright in Pictures: Fully Parallel Mode
 
 Demos and code for the article.
 

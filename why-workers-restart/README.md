@@ -2,6 +2,11 @@
 
 Demos and code for the article.
 
+Timelinea are available by the URL:
+```
+https://vitalets.github.io/playwright-demos/why-workers-restart/__DIR__/timeline-report/index.html
+```
+
 ## No failures
 ```
 (cd no-failures && npx playwright test --workers 1 --reporter=playwright-timeline-reporter)

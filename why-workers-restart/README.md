@@ -31,3 +31,8 @@ https://vitalets.github.io/playwright-demos/why-workers-restart/__DIR__/timeline
 ```
 (cd projects-with-hook && npx playwright test --workers 1 --reporter=playwright-timeline-reporter)
 ```
+
+## Test use
+```
+(cd test-use && npx playwright test --workers 1 --reporter=playwright-timeline-reporter)
+```

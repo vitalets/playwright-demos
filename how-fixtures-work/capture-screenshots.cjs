@@ -1,9 +1,12 @@
 const path = require('node:path');
 const fs = require('node:fs');
+const { pathToFileURL } = require('node:url');
 const { chromium } = require('playwright');
 
-const baseUrl = process.env.BASE_URL || 'http://127.0.0.1:4173/how-fixtures-work';
+const baseUrl = process.env.BASE_URL;
 const outputDir = path.join(__dirname, 'screenshots');
+const deviceScaleFactor = 2;
+const onlyReport = process.env.ONLY_REPORT;
 
 const reports = [
   ['simple-test-scoped-fixture', 'simple-test-scoped-fixture.png'],
@@ -14,7 +17,7 @@ const reports = [
   ['override-page-fixture', 'override-page-fixture.png'],
   ['fixture-dependencies', 'fixture-dependencies.png'],
   ['worker-scoped-fixture-spans-tests', 'worker-scoped-fixture-spans-tests.png'],
-  ['worker-scoped-fixture-two-workers', 'worker-scoped-fixture-two-workers.png', 50],
+  ['worker-scoped-fixture-two-workers', 'worker-scoped-fixture-two-workers.png'],
   ['fixture-scopes-together', 'fixture-scopes-together.png'],
 ];
 
@@ -27,12 +30,18 @@ async function findTimelineBox(page, extraBottom = 0) {
 
     const rect = timeline.getBoundingClientRect();
     return {
-      x: rect.x - 5,
-      y: rect.y - 2.5,
-      width: rect.width + 10,
-      height: rect.height + 5 + extraBottom,
+      x: Math.round(rect.x - 5),
+      y: Math.round(rect.y - 2.5),
+      width: Math.round(rect.width + 10),
+      height: Math.round(rect.height + 5 + extraBottom),
     };
   }, extraBottom);
+}
+
+function reportUrl(report) {
+  return baseUrl
+    ? `${baseUrl}/${report}/timeline-report/index.html`
+    : pathToFileURL(path.join(__dirname, report, 'timeline-report/index.html')).href;
 }
 
 (async () => {
@@ -40,24 +49,26 @@ async function findTimelineBox(page, extraBottom = 0) {
 
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({
-    viewport: { width: 1155, height: 750 },
-    deviceScaleFactor: 2,
+    viewport: { width: 770, height: 750 },
+    deviceScaleFactor,
   });
 
   for (const [report, filename, extraBottom] of reports) {
+    if (onlyReport && report !== onlyReport) continue;
+
     console.log(`Capturing ${report}...`);
     const page = await context.newPage();
     if (extraBottom) {
-      await page.setViewportSize({ width: 1155, height: 900 });
+      await page.setViewportSize({ width: 770, height: 900 });
     }
-    await page.goto(`${baseUrl}/${report}/timeline-report/index.html`, {
+    await page.goto(reportUrl(report), {
       waitUntil: 'domcontentloaded',
       timeout: 10_000,
     });
     await page.waitForTimeout(750);
 
     await page.evaluate(() => {
-      document.documentElement.style.zoom = '1.5';
+      document.documentElement.style.zoom = '1.1';
     });
     await page.waitForTimeout(200);
 
@@ -74,7 +85,9 @@ async function findTimelineBox(page, extraBottom = 0) {
       },
       timeout: 10_000,
     });
-    console.log(`Saved ${filename}: ${Math.round(box.width * 2)}x${Math.round(box.height * 2)}`);
+    console.log(
+      `Saved ${filename}: ${box.width * deviceScaleFactor}x${box.height * deviceScaleFactor}`,
+    );
     await page.close();
   }
 

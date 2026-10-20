@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Todo list</title>
+    <style>
+      * { box-sizing: border-box; }
+      body { margin: 0; width: 340px; color: #20252b; background: white; font: 14px/1.5 system-ui, sans-serif; }
+      main { padding: 24px; }
+      h1 { font-size: 21px; font-weight: 600; margin: 0 0 18px; }
+      form { display: flex; gap: 8px; }
+      input[type="text"] { min-width: 0; width: 100%; padding: 9px 10px; border: 1px solid #cbd1d8; border-radius: 6px; font: inherit; }
+      button { padding: 8px 12px; border: 0; border-radius: 6px; background: #2563eb; color: white; font: inherit; cursor: pointer; }
+      ul { list-style: none; padding: 0; margin: 18px 0 0; }
+      li { display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid #e8ebef; padding: 12px 0; overflow: hidden; }
+      li span { min-width: 0; overflow-wrap: anywhere; }
+      .remove { flex-shrink: 0; width: 28px; height: 28px; padding: 0; background: transparent; color: #667085; font-size: 22px; line-height: 1; }
+      .remove:hover { background: #fee2e2; color: #b91c1c; }
+      .remove:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+      .remove:disabled { cursor: default; opacity: 0.5; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Todo list</h1>
+      <form>
+        <input type="text" aria-label="New task" placeholder="New task" required autofocus>
+        <button type="submit">Add</button>
+      </form>
+      <ul aria-label="Tasks"></ul>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "extension-testing-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "pretest": "npm run build",
+    "test": "playwright test",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "playwright-webext": "^0.3.7",
+    "typescript": "^6.0.2"
+  }
+}

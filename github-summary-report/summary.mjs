@@ -12,12 +12,13 @@ export function renderSummary(runs) {
     'Red = failed attempt; highlighted = retry. Short IDs keep labels readable.', '',
     '```mermaid', '---', 'displayMode: compact', '---', 'gantt',
     '    title Test distribution by shard and worker',
-    '    dateFormat x', '    axisFormat %M:%S', '    todayMarker off', '',
+    '    dateFormat HH:mm:ss.SSS', '    axisFormat %M:%S', '    todayMarker off', '',
   ];
   let id = 0;
   const rows = [];
-  // Use a fixed local-time midnight as the chart origin, avoiding timezone shifts.
-  const origin = new Date(2000, 0, 1).getTime();
+  // Emit local clock strings so viewers in different timezones all start at 00:00.
+  const clock = ms => new Date(ms).toISOString().slice(11, 23);
+  const origin = clock(0);
   for (const run of ordered) {
     const attempts = [...run.attempts].sort((a, b) => a.start - b.start);
     const base = attempts.length ? Math.min(...attempts.map(a => a.start)) : run.start;
@@ -31,7 +32,7 @@ export function renderSummary(runs) {
       for (const task of tasks) {
         const label = `T${++id}${task.retry ? ' R' + task.retry : ''}`;
         const style = task.status !== 'passed' ? 'crit, ' : task.retry ? 'active, ' : '';
-        lines.push(`    ${label} :${style}t${id}, ${origin + task.start - base}, ${Math.max(1, task.duration)}ms`);
+        lines.push(`    ${label} :${style}t${id}, ${clock(task.start - base)}, ${Math.max(1, task.duration)}ms`);
       }
     }
     rows.push(`| ${run.shard} | ${run.status} | ${run.workers} | ${attempts.length} | ${attempts.filter(a => a.retry > 0).length} | ${seconds(span)} |`);

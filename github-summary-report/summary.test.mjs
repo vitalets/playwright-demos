@@ -12,7 +12,7 @@ test('shards with different clocks normalize independently; restarted processes 
   assert.equal((md.match(/section S2 \/ Worker 0/g) ?? []).length, 1);
   assert.ok(md.includes('displayMode: compact'));
   assert.ok(md.includes('Idle :milestone'));
-  const starts = [...md.matchAll(/Total :s\d, (\d+), 350ms/g)].map(m => m[1]);
+  const starts = [...md.matchAll(/Total :s\d, ([\d:.]+), 350ms/g)].map(m => m[1]);
   assert.equal(starts.length, 2);
   assert.equal(starts[0], starts[1]);
   assert.ok(md.includes('R1 :active'));

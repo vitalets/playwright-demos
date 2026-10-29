@@ -9,9 +9,12 @@ export function renderSummary(runs) {
     '# Playwright worker timeline', '',
     'Each shard starts at **00:00** on its own runner. Cross-runner queue delays are excluded.',
     'One row per worker slot; blocks are test attempts. Gaps mean no recorded test attempt.',
-    'Red = failed attempt; highlighted = retry. Short IDs keep labels readable.', '',
+    'Green = successful attempt; red = unsuccessful attempt. Blocks have no test labels.', '',
     '```mermaid', '---', 'displayMode: compact',
-    'config:', '  gantt:', '    leftPadding: 140', '    barHeight: 24',
+    'config:', '  theme: base', '  themeVariables:',
+    '    doneTaskBkgColor: "#2da44e"', '    doneTaskBorderColor: "#238636"',
+    '    critBkgColor: "#cf222e"', '    critBorderColor: "#a40e26"',
+    '  gantt:', '    leftPadding: 140', '    rightPadding: 190', '    barHeight: 24',
     '    barGap: 10', '    fontSize: 12', '    sectionFontSize: 12', '---', 'gantt',
     '    title Test distribution by shard and worker',
     '    dateFormat HH:mm:ss.SSS', '    axisFormat %M:%S', '    tickInterval 1second', '    todayMarker off', '',
@@ -32,8 +35,10 @@ export function renderSummary(runs) {
       lines.push(`    section S${run.shard} / Worker ${slot}`);
       if (!tasks.length) lines.push(`    Idle :milestone, idle${run.shard}_${slot}, ${origin}, 0ms`);
       for (const task of tasks) {
-        const label = `T${++id}${task.retry ? ' R' + task.retry : ''}`;
-        const style = task.status !== 'passed' ? 'crit, ' : task.retry ? 'active, ' : '';
+        // A non-breaking space keeps Mermaid's task label empty visually.
+        const label = '\u00a0';
+        ++id;
+        const style = task.status === 'passed' ? 'done, ' : 'crit, ';
         lines.push(`    ${label} :${style}t${id}, ${clock(task.start - base)}, ${Math.max(1, task.duration)}ms`);
       }
     }

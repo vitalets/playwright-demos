@@ -40,7 +40,8 @@ The combined Markdown is written to `timeline-shards/summary.md`.
 - `summary.mjs` emits Mermaid `gantt` with `displayMode: compact`.
 - Each shard has a total-span row, followed by one section per worker slot.
 - Non-overlapping attempts in a section share a row. `parallelIndex` keeps a restarted worker on the same row.
-- Failed attempts are red; retry attempts are highlighted. Labels are short report IDs, not test names; full titles remain in JSON.
+- Successful attempts are green and unsuccessful attempts are red, including retries. Blocks have no test labels; full titles remain in JSON.
+- Extra right padding reserves space for GitHub’s diagram controls. GitHub does not document a Markdown option to hide these controls or set their initial zoom.
 - The reporter appends to `GITHUB_STEP_SUMMARY` automatically if available.
 - Sharded runs defer publication to `merge.mjs`, which requires all shards to be present.
 
@@ -52,7 +53,7 @@ row spans the first attempt start to the last attempt end. Setup before this win
 and teardown after it are excluded. Gaps mean no recorded test attempt, not necessarily
 idle CPU. Hooks and steps are not separately visualized.
 
-Compact mode can add a row if recorded intervals overlap. Short labels limit crowding,
+Compact mode can add a row if recorded intervals overlap. Blocks have no labels,
 but hundreds of very short tests can still become unreadable. This is a small demo,
 not an aggregated large-suite renderer. Markdown over 900 KiB is replaced with an
 artifact notice to avoid GitHub's 1 MiB per-step limit.

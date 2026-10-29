@@ -15,5 +15,7 @@ test('shards with different clocks normalize independently; restarted processes 
   const starts = [...md.matchAll(/Total :s\d, ([\d:.]+), 350ms/g)].map(m => m[1]);
   assert.equal(starts.length, 2);
   assert.equal(starts[0], starts[1]);
-  assert.ok(md.includes('R1 :active'));
+  assert.ok(md.includes('\u00a0 :crit, t1,'));
+  assert.ok(md.includes('\u00a0 :done, t2,'));
+  assert.ok(!md.includes('R1 :'));
 });

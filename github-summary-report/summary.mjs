@@ -14,7 +14,7 @@ export function renderSummary(runs) {
     'config:', '  gantt:', '    leftPadding: 140', '    barHeight: 24',
     '    barGap: 10', '    fontSize: 12', '    sectionFontSize: 12', '---', 'gantt',
     '    title Test distribution by shard and worker',
-    '    dateFormat HH:mm:ss.SSS', '    axisFormat %M:%S', '    todayMarker off', '',
+    '    dateFormat HH:mm:ss.SSS', '    axisFormat %M:%S', '    tickInterval 1second', '    todayMarker off', '',
   ];
   let id = 0;
   const rows = [];

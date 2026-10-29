@@ -10,7 +10,9 @@ export function renderSummary(runs) {
     'Each shard starts at **00:00** on its own runner. Cross-runner queue delays are excluded.',
     'One row per worker slot; blocks are test attempts. Gaps mean no recorded test attempt.',
     'Red = failed attempt; highlighted = retry. Short IDs keep labels readable.', '',
-    '```mermaid', '---', 'displayMode: compact', '---', 'gantt',
+    '```mermaid', '---', 'displayMode: compact',
+    'config:', '  gantt:', '    leftPadding: 140', '    barHeight: 24',
+    '    barGap: 10', '    fontSize: 12', '    sectionFontSize: 12', '---', 'gantt',
     '    title Test distribution by shard and worker',
     '    dateFormat HH:mm:ss.SSS', '    axisFormat %M:%S', '    todayMarker off', '',
   ];

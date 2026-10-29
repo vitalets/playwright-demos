@@ -1,0 +1,31 @@
+name: Worker timeline - no sharding
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'github-summary-report/**'
+      - '.github/workflows/github-summary.yml'
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: github-summary-report
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: github-summary-report/package-lock.json
+      - run: npm ci
+      - run: npm run test:reporter
+      - run: npm test
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: timeline-data
+          path: github-summary-report/test-results/timeline/

@@ -1,0 +1,11 @@
+{
+  "name": "playwright-github-summary-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:reporter": "node --test summary.test.mjs",
+    "merge": "node merge.mjs"
+  },
+  "devDependencies": { "@playwright/test": "1.59.1" }
+}

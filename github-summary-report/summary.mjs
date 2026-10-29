@@ -35,8 +35,8 @@ export function renderSummary(runs) {
       lines.push(`    section S${run.shard} / Worker ${slot}`);
       if (!tasks.length) lines.push(`    Idle :milestone, idle${run.shard}_${slot}, ${origin}, 0ms`);
       for (const task of tasks) {
-        // A non-breaking space keeps Mermaid's task label empty visually.
-        const label = '\u00a0';
+        // A zero-width space keeps Mermaid's task label empty visually.
+        const label = '\u200b';
         ++id;
         const style = task.status === 'passed' ? 'done, ' : 'crit, ';
         lines.push(`    ${label} :${style}t${id}, ${clock(task.start - base)}, ${Math.max(1, task.duration)}ms`);
